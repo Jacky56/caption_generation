@@ -13,8 +13,10 @@ class Logger(object):
             import datetime
             logging.basicConfig(filename='{}.log'.format(self.filename), level=logging.DEBUG)
             msg = '{} - {}: {} {}'.format(datetime.datetime.now(), method.__name__, args, kwargs)
+            result = method(*args, **kwargs)
             logging.debug(msg)
-            return method(*args, **kwargs)
+            print(result.__dict__)
+            return result
 
         return wrapper
 
