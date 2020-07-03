@@ -1,6 +1,6 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from preprocessingimages.directoryiteratorwithnames import DirectoryIteratorWithNames
-from preprocessingimages.logger import Logger
+from logger import Logger
 from staticvariables import statics
 
 def build_generator_settings() -> ImageDataGenerator:

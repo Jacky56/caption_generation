@@ -16,7 +16,6 @@ class Logger(object):
         self.log_setup.addHandler(self.fileHandler)
 
     def __call__(self, method):
-
         @wraps(method)
         def wrapper(*args, **kwargs):
             log = logging.getLogger(self.filename)
@@ -38,3 +37,4 @@ class Logger(object):
 #         logging.debug(msg)
 #         return method(*args, **kwargs)
 #     return wrapper
+

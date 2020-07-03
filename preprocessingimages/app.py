@@ -1,20 +1,19 @@
-import tensorflow as tf
 from preprocessingimages import generator, vgg
 from tensorflow.keras.preprocessing.image import DirectoryIterator
 from tensorflow.keras.models import Model
 from pickle import dump, load
-from preprocessingimages.logger import Logger
+from logger import Logger
 from staticvariables import statics
 
 
 def create_filename_feature(model: Model, generator_it: DirectoryIterator):
     filename_feature = {}
-
     for batch in generator_it:
         filenames = batch[0]
         image_np = batch[1]
         features = model.predict(image_np, verbose=1)
         filename_feature.update(dict(zip(filenames, features)))
+        # to prevent generator to default loop back to batch 0
         if len(filename_feature) == generator_it.n:
             break
         print(len(filename_feature))
