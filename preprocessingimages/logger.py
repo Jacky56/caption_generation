@@ -1,21 +1,29 @@
 from functools import wraps
+import logging
+import datetime
 
 
 class Logger(object):
-    def __init__(self, filename):
+    def __init__(self, filename, directory='./', level=logging.INFO):
         self.filename = filename
+        self.log_setup = logging.getLogger(self.filename)
+        self.fileHandler = logging.FileHandler('{}/{}.log'.format(directory, filename), mode='a')
+
+        # set format
+        self.formatter = logging.Formatter('%(levelname)s: %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+        self.fileHandler.setFormatter(self.formatter)
+
+        self.log_setup.setLevel(level)
+        self.log_setup.addHandler(self.fileHandler)
 
     def __call__(self, method):
 
         @wraps(method)
         def wrapper(*args, **kwargs):
-            import logging
-            import datetime
-            logging.basicConfig(filename='{}.log'.format(self.filename), level=logging.DEBUG)
-            msg = '{} - {}: {} {}'.format(datetime.datetime.now(), method.__name__, args, kwargs)
+            log = logging.getLogger(self.filename)
+            msg = '{} : {} {}'.format(method.__name__, args, kwargs)
             result = method(*args, **kwargs)
-            logging.debug(msg)
-            print(result.__dict__)
+            log.info(msg)
             return result
 
         return wrapper
