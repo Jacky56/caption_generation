@@ -1,6 +1,5 @@
 from functools import wraps
 import logging
-import datetime
 
 
 class Logger(object):

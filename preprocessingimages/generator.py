@@ -11,7 +11,6 @@ def build_generator_settings() -> ImageDataGenerator:
     return settings
 
 
-
 @Logger("generator", directory=statics.LOGGING_PATH)
 def build_image_iterator(directory, generator_settings, target_size) -> DirectoryIteratorWithNames:
     iterator = DirectoryIteratorWithNames(

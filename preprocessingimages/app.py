@@ -2,7 +2,7 @@ import tensorflow as tf
 from preprocessingimages import generator, vgg
 from tensorflow.keras.preprocessing.image import DirectoryIterator
 from tensorflow.keras.models import Model
-from pickle import dump
+from pickle import dump, load
 from preprocessingimages.logger import Logger
 from staticvariables import statics
 
@@ -13,11 +13,17 @@ def create_filename_feature(model: Model, generator_it: DirectoryIterator):
     for batch in generator_it:
         filenames = batch[0]
         image_np = batch[1]
-        features = model.predict(image_np)
+        features = model.predict(image_np, verbose=1)
         filename_feature.update(dict(zip(filenames, features)))
-
+        if len(filename_feature) == generator_it.n:
+            break
+        print(len(filename_feature))
     return filename_feature
 
+
+@Logger("pickling_load", directory=statics.LOGGING_PATH)
+def load_filename_feature(file_path: str) -> dict:
+    return load(open(file_path, 'rb'))
 
 @Logger("pickling", directory=statics.LOGGING_PATH)
 def store_filename_feature(file_path: str, filename_feature: dict):
@@ -32,10 +38,15 @@ if __name__ == '__main__':
     generator_settings = generator.build_generator_settings()
     generator_iterator = generator.build_image_iterator(directory, generator_settings, target_size)
 
-    filename_feature = create_filename_feature(model, generator_iterator)
+    # filename_feature = create_filename_feature(model, generator_iterator)
+    # store_filename_feature("{}/filename_features_4096.pkl".format(directory), filename_feature)
 
-    store_filename_feature("{}/filename_features_4096.pkl".format(directory), filename_feature)
+    features = load_filename_feature("{}/filename_features_4096.pkl".format(directory))
+    print(len(features))
 
+    for k,v in features.items():
+        print(k, v)
+        break
 
 
 
