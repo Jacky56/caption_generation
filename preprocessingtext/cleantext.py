@@ -1,10 +1,11 @@
 from typing import List
 from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from staticvariables import statics
 from logger import Logger
 
 
-def build_tokenizer(corpus: List[List[str]], num_words=5000, oov_token='<unk>'):
+def build_tokenizer(corpus: List[List[str]], num_words=None, oov_token='<unk>'):
 
     # flat map from List[List[str]] to List[str]
     texts = [text for texts in corpus for text in texts]
@@ -43,10 +44,10 @@ def create_filename_text(raw_text: str) -> dict:
     return filename_text
 
 
-def vectorize_filename_text(filename_text: dict, tokenizer: Tokenizer) -> dict:
-
+def vectorize_filename_text(filename_text: dict, tokenizer: Tokenizer, max_length=64) -> dict:
     for filename in filename_text:
         filename_text[filename] = tokenizer.texts_to_sequences(filename_text[filename])
+        filename_text[filename] = pad_sequences(filename_text[filename], padding='post', maxlen=max_length)
 
     return filename_text
 
