@@ -15,6 +15,7 @@ def test_vectorize_filename_text():
     print(tokenizer.index_word[144])
     print(tokenizer.index_word[669])
     print(len(tokenizer.word_counts))
+    print(tokenizer.index_word[3])
     for k in filename_vector:
         print(k, filename_vector[k])
         break

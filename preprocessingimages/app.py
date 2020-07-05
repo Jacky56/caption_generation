@@ -1,4 +1,4 @@
-from preprocessingimages import generator, vgg
+from preprocessingimages import imagegenerator, vgg
 from tensorflow.keras.preprocessing.image import DirectoryIterator
 from tensorflow.keras.models import Model
 from pickle import dump, load
@@ -34,8 +34,8 @@ if __name__ == '__main__':
 
     model = vgg.build_model()
     target_size = model.layers[0].input.shape[1:3]
-    generator_settings = generator.build_generator_settings()
-    generator_iterator = generator.build_image_iterator(directory, generator_settings, target_size)
+    generator_settings = imagegenerator.build_generator_settings()
+    generator_iterator = imagegenerator.build_image_iterator(directory, generator_settings, target_size)
 
     # filename_feature = create_filename_feature(model, generator_iterator)
     # store_filename_feature("{}/filename_features_4096.pkl".format(directory), filename_feature)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     features = load_filename_feature("{}/filename_features_4096.pkl".format(directory))
     print(len(features))
 
-    for k,v in features.items():
+    for k, v in features.items():
         print(k, v)
         break
 
