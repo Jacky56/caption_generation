@@ -1,11 +1,12 @@
 from typing import List, Dict
-from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from staticvariables import statics
 from logger import Logger
+from pickle import dump, load
 
 
-def build_tokenizer(corpus: List[List[str]], num_words=None, oov_token='<unk>'):
+def build_tokenizer(corpus: List[List[str]], num_words=None, oov_token='<unk>') -> Tokenizer:
 
     # flat map from List[List[str]] to List[str]
     # removed <> in filters
@@ -23,8 +24,16 @@ def build_tokenizer(corpus: List[List[str]], num_words=None, oov_token='<unk>'):
     return tokenizer
 
 
+def store_tokenizer(file_path: str, tokenizer: Tokenizer) -> None:
+    dump(tokenizer.to_json(), open(file_path, 'wb'))
+
+
+def load_tokenizer(file_path: str) -> Tokenizer:
+    return tokenizer_from_json(load(open(file_path, 'rb')))
+
+
 @Logger('load_text', directory=statics.LOGGING_PATH)
-def load_text(filename, directory=statics.DATA_PATH):
+def load_text(filename, directory=statics.DATA_PATH) -> str:
     file = open('{}/{}'.format(directory, filename), 'r')
     text = file.read()
     file.close()
@@ -51,6 +60,7 @@ def create_filename_text(raw_text: str, start_token='<start>', end_token='<end>'
         filename_text[filename].append(text)
 
     return filename_text
+
 
 # nominal to sparse vector
 # return dict: str -> List[str]

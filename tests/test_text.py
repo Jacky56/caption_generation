@@ -1,7 +1,5 @@
 import pytest
-from pickle import load
 from staticvariables import statics
-from preprocessingimages.app import load_filename_feature
 from preprocessingtext import cleantext
 
 
@@ -28,6 +26,23 @@ def test_filename_text():
     for k in filename_text:
         print(k, filename_text[k])
         break
+
+
+
+def test_load_tokenizer():
+    directory = statics.DATA_PATH
+    tokenizer_filename = 'Flickr8k.lemma.token.pkl.test'
+
+    raw_text = cleantext.load_text('Flickr8k.lemma.token.txt')
+    filename_text = cleantext.create_filename_text(raw_text)
+    tokenizer = cleantext.build_tokenizer(list(filename_text.values()))
+    cleantext.store_tokenizer('{}/{}'.format(directory, tokenizer_filename), tokenizer)
+    tokenizer1 = cleantext.load_tokenizer('{}/{}'.format(directory, tokenizer_filename))
+
+    print(tokenizer.word_counts == tokenizer1.word_counts)
+    print(tokenizer.word_index['<start>'] == tokenizer1.word_index['<start>'])
+    print(tokenizer.word_index['<end>'] == tokenizer1.word_index['<end>'])
+    print(tokenizer.word_index['<pad>'] == tokenizer1.word_index['<pad>'])
 
 
 

@@ -1,9 +1,7 @@
 from tensorflow.keras.layers import Dense, Attention, LayerNormalization, Dropout, Layer
-import tensorflow as tf
-
 
 class Text_Decoder_Layer(Layer):
-    def __init__(self, embedding_dim, dff=512, drop_out=0.1):
+    def __init__(self, embedding_dim, dff=512, dropout=0.1):
         super(Text_Decoder_Layer, self).__init__()
 
         self.attention1 = Attention(use_scale=True,
@@ -19,17 +17,17 @@ class Text_Decoder_Layer(Layer):
 
         self.layer_norm = LayerNormalization()
 
-        self.dropout1 = Dropout(drop_out)
-        self.dropout2 = Dropout(drop_out)
+        self.dropout1 = Dropout(dropout)
+        self.dropout2 = Dropout(dropout)
 
-    def call(self, x, enc_output):
+    def call(self, decoder_output, encoder_output, training=True):
 
-        attention1 = self.attention1([x, x])
-        drop1 = self.dropout1(attention1)
-        norm1 = self.layer_norm(drop1 + x)
+        attention1 = self.attention1([decoder_output, decoder_output])
+        drop1 = self.dropout1(attention1, training=training)
+        norm1 = self.layer_norm(drop1 + decoder_output)
 
-        attention2 = self.attention2([norm1, enc_output])
-        drop2 = self.dropout2(attention2)
+        attention2 = self.attention2([norm1, encoder_output])
+        drop2 = self.dropout2(attention2, training=training)
         norm2 = self.layer_norm(drop2 + norm1)
 
         ffn1 = self.dff(norm2)
