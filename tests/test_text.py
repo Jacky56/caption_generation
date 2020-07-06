@@ -10,7 +10,7 @@ def test_vectorize_filename_text():
     filename_text = cleantext.create_filename_text(raw_text)
     tokenizer = cleantext.build_tokenizer(list(filename_text.values()))
 
-    filename_vector = cleantext.vectorize_filename_text(filename_text, tokenizer)
+    filename_vector = cleantext.vectorize_filename_text(filename_text, tokenizer, 64)
 
     print(tokenizer.index_word[144])
     print(tokenizer.index_word[669])

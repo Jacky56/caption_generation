@@ -54,10 +54,10 @@ def create_filename_text(raw_text: str, start_token='<start>', end_token='<end>'
 
 # nominal to sparse vector
 # return dict: str -> List[str]
-def vectorize_filename_text(filename_text: dict, tokenizer: Tokenizer, max_length=64) -> Dict[str, List[str]]:
+def vectorize_filename_text(filename_text: dict, tokenizer: Tokenizer, seq_length) -> Dict[str, List[str]]:
     for filename in filename_text:
         filename_text[filename] = tokenizer.texts_to_sequences(filename_text[filename])
-        filename_text[filename] = pad_sequences(filename_text[filename], padding='post', maxlen=max_length)
+        filename_text[filename] = pad_sequences(filename_text[filename], padding='post', maxlen=seq_length)
 
     return filename_text
 
