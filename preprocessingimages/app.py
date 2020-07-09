@@ -41,10 +41,9 @@ if __name__ == '__main__':
     # store_filename_feature("{}/filename_features_4096.pkl".format(directory), filename_feature)
 
     features = load_filename_feature("{}/filename_features_4096.pkl".format(directory))
-    print(len(features))
 
     for k, v in features.items():
-        print(k, v)
+        print(k, v.shape)
         break
 
 

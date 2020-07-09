@@ -20,6 +20,7 @@ class Decoder(Layer):
 
     def call(self, sparse_sequence_vector, encoder_output, training=True):
 
+        # seq_len is varaible len
         seq_len = tf.shape(sparse_sequence_vector)[1]
 
         embedding_output = self.embedding(sparse_sequence_vector)
@@ -31,5 +32,6 @@ class Decoder(Layer):
         for dec_layer in self.dec_layers:
             decoder_output = dec_layer(decoder_output, encoder_output, training)
 
+        # (batch_size, sequence_length, embedding_dim)
         return decoder_output
 

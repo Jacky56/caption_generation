@@ -1,13 +1,12 @@
-from tensorflow.keras import Model
 from customlayers.imageencoder import Image_Encoder
 from customlayers.decoder import Decoder
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Layer
 
 
-class Encoder_Decoder(Model):
+class EncoderDecoder(Layer):
     def __init__(self, repeat_layers, embedding_dim, target_vocab_size,
                  dff=512, maximum_position_encoding=5000, dropout=0.1):
-        super(Encoder_Decoder, self).__init__()
+        super(EncoderDecoder, self).__init__()
 
         self.encoder = Image_Encoder(embedding_dim, dropout)
         self.decoder = Decoder(repeat_layers, embedding_dim, target_vocab_size,
